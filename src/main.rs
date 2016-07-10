@@ -1,7 +1,7 @@
 extern crate regex;
 
 use std::fs::File;
-use std::collections::HashSet;
+use std::collections::HashMap;
 use std::path::Path;
 use regex::Regex;
 use std::error::Error;
@@ -30,9 +30,16 @@ fn words(haystack: &str) -> Vec<&str> {
 	return matches;
 }
 
-// fn train(features: [String]) {
+fn train(features: Vec<&str>) -> HashMap<&str, i32> {
+	let mut model = HashMap::new();
 
-// }
+	for feature in features {
+		let count = model.entry(feature).or_insert(1);
+		*count += 1;
+	}
+
+	return model;
+}
 
 // fn edits1(word: String) {
 
