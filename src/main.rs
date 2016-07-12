@@ -7,6 +7,7 @@ use std::path::Path;
 use regex::Regex;
 use std::error::Error;
 use std::io::prelude::*;
+use std::iter::Iterator;
 
 fn main() {
 
@@ -23,6 +24,8 @@ fn main() {
 	file.read_to_string(&mut buffer).unwrap();
     let nwords = words(&buffer);
     let alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+    splitTest("hello");
 }
 
 fn words(haystack: &str) -> Vec<&str> {
@@ -44,9 +47,21 @@ fn train(features: Vec<&str>) -> HashMap<&str, i32> {
 	return model;
 }
 
-// fn edits1(word: String) {
-
+// fn edits1(word: &str) {
+// 	let mut splits = word.chars().map(|char| {
+// 		// tuple with split string
+// 		word.split_at(char)
+// 	});
 // }
+
+fn splitTest(word: &str) {
+	let splits: Vec<(&str, &str)> = word.char_indices().map(|index| {
+		let (idx, character) = index;
+		return word.split_at(idx);
+	}).collect();
+
+	println!("{:?}", splits);
+}
 
 // fn known_edits2(word: String) {
 
