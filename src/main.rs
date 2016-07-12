@@ -2,6 +2,7 @@ extern crate regex;
 
 use std::fs::File;
 use std::collections::HashMap;
+use std::collections::hash_map::Entry::{Occupied, Vacant};
 use std::path::Path;
 use regex::Regex;
 use std::error::Error;
@@ -34,8 +35,10 @@ fn train(features: Vec<&str>) -> HashMap<&str, i32> {
 	let mut model = HashMap::new();
 
 	for feature in features {
-		let count = model.entry(feature).or_insert(1);
-		*count += 1;
+		match model.entry(feature) {
+			Occupied(mut entry) => { (*entry.get_mut()) += 1; },
+			Vacant(entry) => { entry.insert(1); },
+		}
 	}
 
 	return model;
