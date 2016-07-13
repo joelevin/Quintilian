@@ -62,6 +62,14 @@ fn splitTest(word: &str) {
 	println!("{:?}", splits);
 }
 
+fn deletesTest(splits: Vec<(&str, &str)>) {
+	let deletes: Vec<&str> = splits.iter().map(|split| {
+		let mut concatenatedString: String = split.0.to_owned();
+		let secondSplit: &str = split.1;
+		return concatenatedString.push_str(secondSplit);
+	}).collect();
+}
+
 // fn known_edits2(word: String) {
 
 // }
