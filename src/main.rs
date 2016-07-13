@@ -47,12 +47,12 @@ fn train(features: Vec<&str>) -> HashMap<&str, i32> {
 	return model;
 }
 
-// fn edits1(word: &str) {
-// 	let mut splits = word.chars().map(|char| {
-// 		// tuple with split string
-// 		word.split_at(char)
-// 	});
-// }
+fn edits1(word: &str) {
+	let splits: Vec<(&str, &str)> = word.char_indices().map(|index| {
+		return word.split_at(index.0);
+	}).collect();
+}
+
 
 fn splitTest(word: &str) {
 	let splits: Vec<(&str, &str)> = word.char_indices().map(|index| {
