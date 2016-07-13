@@ -55,9 +55,8 @@ fn edits1(word: &str) {
 
 
 fn splitTest(word: &str) {
-	let splits: Vec<(&str, &str)> = word.char_indices().map(|index| {
-		let (idx, character) = index;
-		return word.split_at(idx);
+	let splits: Vec<(&str, &str)> = word.char_indices().map(|(index, character)| {
+		return word.split_at(index);
 	}).collect();
 
 	println!("{:?}", splits);
