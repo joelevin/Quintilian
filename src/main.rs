@@ -25,7 +25,7 @@ fn main() {
     let nwords = words(&buffer);
     let alphabet = "abcdefghijklmnopqrstuvwxyz";
 
-    splitTest("hello");
+    deletesTest(splitTest("hello"));
 }
 
 fn words(haystack: &str) -> Vec<&str> {
@@ -51,23 +51,35 @@ fn edits1(word: &str) {
 	let splits: Vec<(&str, &str)> = word.char_indices().map(|index| {
 		return word.split_at(index.0);
 	}).collect();
+
+	let deletes: Vec<String> = splits.iter().map(|split| {
+		let mut concatenatedString: String = split.0.to_owned();
+		let mut secondSplit: String = split.1.to_owned();
+		secondSplit.remove(0);
+		return concatenatedString + &secondSplit;
+	}).collect();
 }
 
 
-fn splitTest(word: &str) {
+fn splitTest(word: &str) -> Vec<(&str, &str)> {
 	let splits: Vec<(&str, &str)> = word.char_indices().map(|(index, character)| {
 		return word.split_at(index);
 	}).collect();
 
 	println!("{:?}", splits);
+
+	return splits;
 }
 
 fn deletesTest(splits: Vec<(&str, &str)>) {
-	let deletes: Vec<&str> = splits.iter().map(|split| {
+	let deletes: Vec<String> = splits.iter().map(|split| {
 		let mut concatenatedString: String = split.0.to_owned();
-		let secondSplit: &str = split.1;
-		return concatenatedString.push_str(secondSplit);
+		let mut secondSplit: String = split.1.to_owned();
+		secondSplit.remove(0);
+		return concatenatedString + &secondSplit;
 	}).collect();
+
+	println!("{:?}", deletes);
 }
 
 // fn known_edits2(word: String) {
