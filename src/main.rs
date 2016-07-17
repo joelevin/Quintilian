@@ -25,8 +25,9 @@ fn main() {
     let nwords = words(&buffer);
     let alphabet = "abcdefghijklmnopqrstuvwxyz";
 
-    deletes_test(split_test("hello"));
-    transposes_test(split_test("hello"));
+    // deletes_test(split_test("hello"));
+    // transposes_test(split_test("hello"));
+    replace_test(split_test("hello"));
 }
 
 fn words(haystack: &str) -> Vec<&str> {
@@ -123,6 +124,19 @@ fn transposes_test(splits: Vec<(&str, &str)>) {
 	println!("{:?}", transposes);
 }
 
+fn replace_test(splits: Vec<(&str, &str)>) {
+    let alphabet = "abcdefghijklmnopqrstuvwxyz";
+    let mut replaces: Vec<String> = Vec::new();
+    for split in splits {
+    	for letter in alphabet.chars() {
+    		let mut first_drop = split.1.to_owned().clone();
+    		first_drop.remove(0);
+	    	replaces.push(split.0.to_owned() + &letter.to_string() + &first_drop);
+	    }
+    }
+
+    println!("{:?}", replaces);
+}
 // fn known_edits2(word: String) {
 
 // }
