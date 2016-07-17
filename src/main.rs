@@ -25,7 +25,8 @@ fn main() {
     let nwords = words(&buffer);
     let alphabet = "abcdefghijklmnopqrstuvwxyz";
 
-    deletesTest(splitTest("hello"));
+    deletes_test(split_test("hello"));
+    transposes_test(split_test("hello"));
 }
 
 fn words(haystack: &str) -> Vec<&str> {
@@ -53,15 +54,15 @@ fn edits1(word: &str) {
 	}).collect();
 
 	let deletes: Vec<String> = splits.iter().map(|split| {
-		let mut concatenatedString: String = split.0.to_owned();
-		let mut secondSplit: String = split.1.to_owned();
-		secondSplit.remove(0);
-		return concatenatedString + &secondSplit;
+		let concatenated_string: String = split.0.to_owned();
+		let mut second_split: String = split.1.to_owned();
+		second_split.remove(0);
+		return concatenated_string + &second_split;
 	}).collect();
 
 	let transposes: Vec<String> = splits.iter().map(|split| {
-		let mut left_string: String = split.0.to_owned();
-		let mut right_string: String = split.1.to_owned();
+		let left_string: String = split.0.to_owned();
+		let right_string: String = split.1.to_owned();
 		if let Some(first) = right_string.chars().nth(0) {
 			let first_string = first.to_string();
 			let mut first_drop = right_string.clone();
@@ -88,12 +89,12 @@ fn split_test(word: &str) -> Vec<(&str, &str)> {
 	return splits;
 }
 
-fn deletesTest(splits: Vec<(&str, &str)>) {
+fn deletes_test(splits: Vec<(&str, &str)>) {
 	let deletes: Vec<String> = splits.iter().map(|split| {
-		let mut concatenatedString: String = split.0.to_owned();
-		let mut secondSplit: String = split.1.to_owned();
-		secondSplit.remove(0);
-		return concatenatedString + &secondSplit;
+		let concatenated_string: String = split.0.to_owned();
+		let mut second_split: String = split.1.to_owned();
+		second_split.remove(0);
+		return concatenated_string + &second_split;
 	}).collect();
 
 	println!("{:?}", deletes);
@@ -101,8 +102,8 @@ fn deletesTest(splits: Vec<(&str, &str)>) {
 
 fn transposes_test(splits: Vec<(&str, &str)>) {
 	let transposes: Vec<String> = splits.iter().map(|split| {
-		let mut left_string: String = split.0.to_owned();
-		let mut right_string: String = split.1.to_owned();
+		let left_string: String = split.0.to_owned();
+		let right_string: String = split.1.to_owned();
 		if let Some(first) = right_string.chars().nth(0) {
 			let first_string = first.to_string();
 			let mut first_drop = right_string.clone();
