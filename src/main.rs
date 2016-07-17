@@ -58,10 +58,27 @@ fn edits1(word: &str) {
 		secondSplit.remove(0);
 		return concatenatedString + &secondSplit;
 	}).collect();
+
+	let transposes: Vec<String> = splits.iter().map(|split| {
+		let mut left_string: String = split.0.to_owned();
+		let mut right_string: String = split.1.to_owned();
+		if let Some(first) = right_string.chars().nth(0) {
+			let first_string = first.to_string();
+			let mut first_drop = right_string.clone();
+			first_drop.remove(0);
+			if let Some(second) = first_drop.chars().nth(0) {
+				let second_string = second.to_string();
+				let mut second_drop = first_drop.clone();
+				second_drop.remove(0);
+				return left_string + &second_string + &first_string + &second_drop;
+			}
+		}
+		return "".to_string()
+	}).filter(|string| !string.is_empty()).collect();
 }
 
 
-fn splitTest(word: &str) -> Vec<(&str, &str)> {
+fn split_test(word: &str) -> Vec<(&str, &str)> {
 	let splits: Vec<(&str, &str)> = word.char_indices().map(|(index, character)| {
 		return word.split_at(index);
 	}).collect();
@@ -80,6 +97,29 @@ fn deletesTest(splits: Vec<(&str, &str)>) {
 	}).collect();
 
 	println!("{:?}", deletes);
+}
+
+fn transposes_test(splits: Vec<(&str, &str)>) {
+	let transposes: Vec<String> = splits.iter().map(|split| {
+		let mut left_string: String = split.0.to_owned();
+		let mut right_string: String = split.1.to_owned();
+		if let Some(first) = right_string.chars().nth(0) {
+			let first_string = first.to_string();
+			let mut first_drop = right_string.clone();
+			first_drop.remove(0);
+			if let Some(second) = first_drop.chars().nth(0) {
+				let second_string = second.to_string();
+				let mut second_drop = first_drop.clone();
+				second_drop.remove(0);
+				return left_string + &second_string + &first_string + &second_drop;
+			}
+		}
+
+		return "".to_string()
+	
+	}).filter(|string| !string.is_empty()).collect();
+
+	println!("{:?}", transposes);
 }
 
 // fn known_edits2(word: String) {
