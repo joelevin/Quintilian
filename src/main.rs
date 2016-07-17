@@ -1,6 +1,7 @@
 extern crate regex;
 
 use std::fs::File;
+use std::collections::HashSet;
 use std::collections::HashMap;
 use std::collections::hash_map::Entry::{Occupied, Vacant};
 use std::path::Path;
@@ -50,19 +51,19 @@ fn train(features: Vec<&str>) -> HashMap<&str, i32> {
 	return model;
 }
 
-fn edits1(word: &str) {
+fn edits1(word: &str) -> HashSet<String> {
 	let splits: Vec<(&str, &str)> = word.char_indices().map(|index| {
 		return word.split_at(index.0);
 	}).collect();
 
-	let deletes: Vec<String> = splits.iter().map(|split| {
+	let deletes: Vec<String> = splits.clone().iter().map(|split| {
 		let concatenated_string: String = split.0.to_owned();
 		let mut second_split: String = split.1.to_owned();
 		second_split.remove(0);
 		return concatenated_string + &second_split;
 	}).collect();
 
-	let transposes: Vec<String> = splits.iter().map(|split| {
+	let transposes: Vec<String> = splits.clone().iter().map(|split| {
 		let left_string: String = split.0.to_owned();
 		let right_string: String = split.1.to_owned();
 		if let Some(first) = right_string.chars().nth(0) {
@@ -78,6 +79,41 @@ fn edits1(word: &str) {
 		}
 		return "".to_string()
 	}).filter(|string| !string.is_empty()).collect();
+
+	// replaces
+	let alphabet = "abcdefghijklmnopqrstuvwxyz";
+    let mut replaces: Vec<String> = Vec::new();
+    for split in splits.clone() {
+    	for letter in alphabet.chars() {
+    		let mut first_drop = split.1.to_owned().clone();
+    		first_drop.remove(0);
+	    	replaces.push(split.0.to_owned() + &letter.to_string() + &first_drop);
+	    }
+    }
+
+	// inserts
+	let mut inserts: Vec<String> = Vec::new();
+    for split in splits.clone() {
+    	for letter in alphabet.chars() {
+	    	inserts.push(split.0.to_owned() + &letter.to_string() + &split.1.to_owned());
+	    }
+    }
+
+    let mut edits = HashSet::new();
+    for delete in deletes {
+    	edits.insert(delete);
+    }
+    for transpose in transposes {
+    	edits.insert(transpose);
+    }
+    for replace in replaces {
+    	edits.insert(replace);
+    }
+    for insert in inserts {
+    	edits.insert(insert);
+    }
+
+    return edits;
 }
 
 
