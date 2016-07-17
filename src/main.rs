@@ -27,7 +27,8 @@ fn main() {
 
     // deletes_test(split_test("hello"));
     // transposes_test(split_test("hello"));
-    replace_test(split_test("hello"));
+    // replace_test(split_test("hello"));
+    inserts_test(split_test("hello"));
 }
 
 fn words(haystack: &str) -> Vec<&str> {
@@ -136,6 +137,18 @@ fn replace_test(splits: Vec<(&str, &str)>) {
     }
 
     println!("{:?}", replaces);
+}
+
+fn inserts_test(splits: Vec<(&str, &str)>) {
+	let alphabet = "abcdefghijklmnopqrstuvwxyz";
+    let mut inserts: Vec<String> = Vec::new();
+    for split in splits {
+    	for letter in alphabet.chars() {
+	    	inserts.push(split.0.to_owned() + &letter.to_string() + &split.1.to_owned());
+	    }
+    }
+
+    println!("{:?}", inserts);
 }
 // fn known_edits2(word: String) {
 
