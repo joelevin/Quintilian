@@ -116,6 +116,15 @@ fn edits1(word: &str) -> HashSet<String> {
     return edits;
 }
 
+fn known(words: Vec<String>, nwords: HashMap<&str, i32>) -> HashSet<String> {
+	let mut set = HashSet::new();
+	let known_words: Vec<String> = words.into_iter().filter(|word| nwords.contains_key::<str>(&word)).collect();
+	for word in known_words {
+		set.insert(word);
+	}
+
+	return set;
+}
 
 fn split_test(word: &str) -> Vec<(&str, &str)> {
 	let splits: Vec<(&str, &str)> = word.char_indices().map(|(index, character)| {
