@@ -134,13 +134,19 @@ fn known_edits_2(word: &str, nwords: HashMap<&str, i32>) -> Option<HashSet<Strin
 	}
 }
 
+fn known(words: HashSet<String>, nwords: &HashMap<&str, i32>) -> Option<HashSet<String>> {
 	let mut set = HashSet::new();
 	let known_words: Vec<String> = words.into_iter().filter(|word| nwords.contains_key::<str>(&word)).collect();
 	for word in known_words {
 		set.insert(word);
 	}
 
-	return set;
+	if set.is_empty() {
+		return None
+	}
+	else {
+	    return Some(set);
+	}
 }
 
 fn split_test(word: &str) -> Vec<(&str, &str)> {
