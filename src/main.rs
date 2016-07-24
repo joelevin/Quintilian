@@ -33,6 +33,7 @@ fn main() {
 }
 
 fn words(haystack: &str) -> Vec<&str> {
+	let lowercase_haystack = haystack.to_lowercase();
 	let re = Regex::new("[a-z]+").unwrap();
 	let matches: Vec<&str> = re.split(haystack).collect();
 	return matches;
