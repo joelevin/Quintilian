@@ -116,7 +116,24 @@ fn edits1(word: &str) -> HashSet<String> {
     return edits;
 }
 
-fn known(words: Vec<String>, nwords: HashMap<&str, i32>) -> HashSet<String> {
+fn known_edits_2(word: &str, nwords: HashMap<&str, i32>) -> Option<HashSet<String>> {
+	let mut known_edits: HashSet<String> = HashSet::new();
+	let mut union: HashSet<String> = HashSet::new();
+	let edits_1 = edits1(word);
+	for edit in edits_1 {
+		if let Some(k) = known(edits1(word), &nwords) {
+			union = known_edits.union(&k).cloned().collect();
+		}
+	}
+
+	if union.is_empty() {
+		return None;
+	}
+	else {
+	    return Some(union);
+	}
+}
+
 	let mut set = HashSet::new();
 	let known_words: Vec<String> = words.into_iter().filter(|word| nwords.contains_key::<str>(&word)).collect();
 	for word in known_words {
@@ -195,17 +212,3 @@ fn inserts_test(splits: Vec<(&str, &str)>) {
 
     println!("{:?}", inserts);
 }
-// fn known_edits2(word: String) {
-
-// }
-
-// fn known(words: [String], nwords: HashSet<String>) -> Option<[String]> {
-// 	// for word in words {
-// 	// 	if (nwords.contains())
-// 	// }
-// 	// None
-// }
-
-// fn correct(word: String) -> String {
-	 
-// }
