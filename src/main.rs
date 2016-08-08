@@ -122,7 +122,7 @@ fn known_edits_2(word: &str, nwords: HashMap<&str, i32>) -> Option<HashSet<Strin
 	let mut union: HashSet<String> = HashSet::new();
 	let edits_1 = edits1(word);
 	for edit in edits_1 {
-		if let Some(k) = known(edits1(word), &nwords) {
+		if let Some(k) = known(edits1(word), nwords.clone()) {
 			union = known_edits.union(&k).cloned().collect();
 		}
 	}
@@ -135,7 +135,7 @@ fn known_edits_2(word: &str, nwords: HashMap<&str, i32>) -> Option<HashSet<Strin
 	}
 }
 
-fn known(words: HashSet<String>, nwords: &HashMap<&str, i32>) -> Option<HashSet<String>> {
+fn known(words: HashSet<String>, nwords: HashMap<&str, i32>) -> Option<HashSet<String>> {
 	let mut set = HashSet::new();
 	let known_words: Vec<String> = words.into_iter().filter(|word| nwords.contains_key::<str>(&word)).collect();
 	for word in known_words {
