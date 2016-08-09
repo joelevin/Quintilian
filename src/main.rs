@@ -32,11 +32,8 @@ fn main() {
     inserts_test(split_test("hello"));
 }
 
-fn words(haystack: &str) -> Vec<&str> {
-	let lowercase_haystack = haystack.to_lowercase();
-	let re = Regex::new("[a-z]+").unwrap();
-	let matches: Vec<&str> = re.split(haystack).collect();
-	return matches;
+fn words(buffer: &str) -> Vec<&str> {
+	return buffer.split_whitespace().collect();
 }
 
 fn train(features: Vec<&str>) -> HashMap<&str, i32> {
