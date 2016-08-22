@@ -9,27 +9,34 @@ use regex::Regex;
 use std::error::Error;
 use std::io::prelude::*;
 use std::iter::Iterator;
+use std::borrow::Borrow;
+use std::env;
 
 fn main() {
 
-	// read file
-	let path = Path::new("big.txt");
-	let display = path.display();
-	let mut file = match File::open(&path) {
-		Err(why) => panic!("couldn't open {}: {}", display, why.description()),
-		Ok(file) => file,
-	};
+    if let Some(arg1) = env::args().nth(1) {
+		// read file
+		let path = Path::new("big.txt");
+		let display = path.display();
+		let mut file = match File::open(&path) {
+			Err(why) => panic!("couldn't open {}: {}", display, why.description()),
+			Ok(file) => file,
+		};
 
-	// parse into string
-	let mut buffer = String::new();
-	file.read_to_string(&mut buffer).unwrap();
-    let nwords = words(&buffer);
-    let alphabet = "abcdefghijklmnopqrstuvwxyz";
+		// parse into string
+		let mut buffer = String::new();
+		file.read_to_string(&mut buffer).unwrap();
+	    let nwords = words(&buffer);
+	    let alphabet = "abcdefghijklmnopqrstuvwxyz";
+	    let known_words = train(nwords);
 
+	    let correct_word = correct(&arg1, known_words);
+	    println!("{:?}", correct_word);
+    }
     // deletes_test(split_test("hello"));
     // transposes_test(split_test("hello"));
     // replace_test(split_test("hello"));
-    inserts_test(split_test("hello"));
+    // inserts_test(split_test("hello"));
 }
 
 fn words(buffer: &str) -> Vec<&str> {
@@ -144,6 +151,35 @@ fn known(words: HashSet<String>, nwords: HashMap<&str, i32>) -> Option<HashSet<S
 	}
 	else {
 	    return Some(set);
+	}
+}
+
+fn correct(word: &str, nwords: HashMap<&str, i32>) -> String {
+	let mut word_set: HashSet<String> = HashSet::new();
+	word_set.insert(word.to_string());
+	let emptySet: HashSet<String> = HashSet::new();
+
+	let first_known = known(word_set.clone(), nwords.clone());
+	let first_known_edits = known(edits1(word), nwords.clone());
+	let second_known_edits = known(known_edits_2(word, nwords.clone()).unwrap_or(emptySet.clone()), nwords.clone());
+
+	let candidates = first_known.unwrap_or(first_known_edits.unwrap_or(second_known_edits.unwrap_or(emptySet)));
+	let candidate = candidates.iter().max_by_key(|key| {
+		let keySlice: &str = &key;
+		let default_count: i32 = 1;
+		let value = nwords.get(keySlice);
+		// println!("{:?} : {:?}", keySlice, value);
+		match value {
+		    Some(value) => return value.to_owned(),
+		    None => return default_count.to_owned(),
+		};
+	});
+	// println!("candidates: {:?}",  candidates);
+	// println!("candidate: {:?}", candidate);
+
+	match candidate {
+	    Some(candidate) => return candidate.to_string(),
+	    None => return String::from(word),
 	}
 }
 
