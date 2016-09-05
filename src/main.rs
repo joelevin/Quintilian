@@ -61,15 +61,18 @@ fn splits(word: &str) -> Vec<(&str, &str)> {
 	return splits;
 }
 
-fn edits1(word: &str) -> HashSet<String> {
-	let splits = splits(word);
-
-	let deletes: Vec<String> = splits.clone().iter().map(|split| {
+fn deletes(splits: &Vec<(&str, &str)>) -> Vec<String> {
+	return splits.clone().iter().map(|split| {
 		let concatenated_string: String = split.0.to_owned();
 		let mut second_split: String = split.1.to_owned();
 		second_split.remove(0);
 		return concatenated_string + &second_split;
 	}).collect();
+}
+
+fn edits1(word: &str) -> HashSet<String> {
+	let splits = splits(word);
+	let deletes: Vec<String> = deletes(&splits);
 
 	let transposes: Vec<String> = splits.clone().iter().map(|split| {
 		let left_string: String = split.0.to_owned();
@@ -190,21 +193,18 @@ fn correct(word: &str, nwords: HashMap<&str, i32>) -> String {
 fn split_test() {
 	let word: &str = "hello";
 	let splits = splits(word);
-	let test_splits: Vec<(&str, &str)> = vec![("", "hello"), ("h", "ello"), ("he", "llo"), ("hel", "lo"), ("hell", "o")];
-	assert_eq!(&splits[..], &test_splits[..]);
+	let expected_splits: Vec<(&str, &str)> = vec![("", "hello"), ("h", "ello"), ("he", "llo"), ("hel", "lo"), ("hell", "o")];
+	assert_eq!(&splits[..], &expected_splits[..]);
 }
 
-// #[test]
-// fn deletes_test(splits: Vec<(&str, &str)>) {
-// 	let deletes: Vec<String> = splits.iter().map(|split| {
-// 		let concatenated_string: String = split.0.to_owned();
-// 		let mut second_split: String = split.1.to_owned();
-// 		second_split.remove(0);
-// 		return concatenated_string + &second_split;
-// 	}).collect();
-
-// 	println!("{:?}", deletes);
-// }
+#[test]
+fn deletes_test() {
+	let word: &str = "hello";
+	let splits = splits(word);
+	let deletes = deletes(&splits);
+	let expected_deletes = vec!["ello", "hllo", "helo", "helo", "hell"]; 
+	assert_eq!(&deletes[..], &expected_deletes[..]);
+}
 
 // #[test]
 // fn transposes_test(splits: Vec<(&str, &str)>) {
