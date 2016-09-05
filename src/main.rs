@@ -186,72 +186,74 @@ fn correct(word: &str, nwords: HashMap<&str, i32>) -> String {
 	}
 }
 
-fn split_test(word: &str) -> Vec<(&str, &str)> {
-	let splits: Vec<(&str, &str)> = word.char_indices().map(|(index, character)| {
-		return word.split_at(index);
-	}).collect();
-
-	println!("{:?}", splits);
-
-	return splits;
+#[test]
+fn split_test() {
+	let word: &str = "hello";
+	let splits = splits(word);
+	let test_splits: Vec<(&str, &str)> = vec![("", "hello"), ("h", "ello"), ("he", "llo"), ("hel", "lo"), ("hell", "o")];
+	assert_eq!(&splits[..], &test_splits[..]);
 }
 
-fn deletes_test(splits: Vec<(&str, &str)>) {
-	let deletes: Vec<String> = splits.iter().map(|split| {
-		let concatenated_string: String = split.0.to_owned();
-		let mut second_split: String = split.1.to_owned();
-		second_split.remove(0);
-		return concatenated_string + &second_split;
-	}).collect();
+// #[test]
+// fn deletes_test(splits: Vec<(&str, &str)>) {
+// 	let deletes: Vec<String> = splits.iter().map(|split| {
+// 		let concatenated_string: String = split.0.to_owned();
+// 		let mut second_split: String = split.1.to_owned();
+// 		second_split.remove(0);
+// 		return concatenated_string + &second_split;
+// 	}).collect();
 
-	println!("{:?}", deletes);
-}
+// 	println!("{:?}", deletes);
+// }
 
-fn transposes_test(splits: Vec<(&str, &str)>) {
-	let transposes: Vec<String> = splits.iter().map(|split| {
-		let left_string: String = split.0.to_owned();
-		let right_string: String = split.1.to_owned();
-		if let Some(first) = right_string.chars().nth(0) {
-			let first_string = first.to_string();
-			let mut first_drop = right_string.clone();
-			first_drop.remove(0);
-			if let Some(second) = first_drop.chars().nth(0) {
-				let second_string = second.to_string();
-				let mut second_drop = first_drop.clone();
-				second_drop.remove(0);
-				return left_string + &second_string + &first_string + &second_drop;
-			}
-		}
+// #[test]
+// fn transposes_test(splits: Vec<(&str, &str)>) {
+// 	let transposes: Vec<String> = splits.iter().map(|split| {
+// 		let left_string: String = split.0.to_owned();
+// 		let right_string: String = split.1.to_owned();
+// 		if let Some(first) = right_string.chars().nth(0) {
+// 			let first_string = first.to_string();
+// 			let mut first_drop = right_string.clone();
+// 			first_drop.remove(0);
+// 			if let Some(second) = first_drop.chars().nth(0) {
+// 				let second_string = second.to_string();
+// 				let mut second_drop = first_drop.clone();
+// 				second_drop.remove(0);
+// 				return left_string + &second_string + &first_string + &second_drop;
+// 			}
+// 		}
 
-		return "".to_string()
+// 		return "".to_string()
 	
-	}).filter(|string| !string.is_empty()).collect();
+// 	}).filter(|string| !string.is_empty()).collect();
 
-	println!("{:?}", transposes);
-}
+// 	println!("{:?}", transposes);
+// }
 
-fn replace_test(splits: Vec<(&str, &str)>) {
-    let alphabet = "abcdefghijklmnopqrstuvwxyz";
-    let mut replaces: Vec<String> = Vec::new();
-    for split in splits {
-    	for letter in alphabet.chars() {
-    		let mut first_drop = split.1.to_owned().clone();
-    		first_drop.remove(0);
-	    	replaces.push(split.0.to_owned() + &letter.to_string() + &first_drop);
-	    }
-    }
+// #[test]
+// fn replace_test(splits: Vec<(&str, &str)>) {
+//     let alphabet = "abcdefghijklmnopqrstuvwxyz";
+//     let mut replaces: Vec<String> = Vec::new();
+//     for split in splits {
+//     	for letter in alphabet.chars() {
+//     		let mut first_drop = split.1.to_owned().clone();
+//     		first_drop.remove(0);
+// 	    	replaces.push(split.0.to_owned() + &letter.to_string() + &first_drop);
+// 	    }
+//     }
 
-    println!("{:?}", replaces);
-}
+//     println!("{:?}", replaces);
+// }
 
-fn inserts_test(splits: Vec<(&str, &str)>) {
-	let alphabet = "abcdefghijklmnopqrstuvwxyz";
-    let mut inserts: Vec<String> = Vec::new();
-    for split in splits {
-    	for letter in alphabet.chars() {
-	    	inserts.push(split.0.to_owned() + &letter.to_string() + &split.1.to_owned());
-	    }
-    }
+// #[test]
+// fn inserts_test(splits: Vec<(&str, &str)>) {
+// 	let alphabet = "abcdefghijklmnopqrstuvwxyz";
+//     let mut inserts: Vec<String> = Vec::new();
+//     for split in splits {
+//     	for letter in alphabet.chars() {
+// 	    	inserts.push(split.0.to_owned() + &letter.to_string() + &split.1.to_owned());
+// 	    }
+//     }
 
-    println!("{:?}", inserts);
-}
+//     println!("{:?}", inserts);
+// }
