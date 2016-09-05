@@ -53,10 +53,16 @@ fn train(features: Vec<&str>) -> HashMap<&str, i32> {
 	return model;
 }
 
-fn edits1(word: &str) -> HashSet<String> {
+fn splits(word: &str) -> Vec<(&str, &str)> {
 	let splits: Vec<(&str, &str)> = word.char_indices().map(|index| {
 		return word.split_at(index.0);
 	}).collect();
+
+	return splits;
+}
+
+fn edits1(word: &str) -> HashSet<String> {
+	let splits = splits(word);
 
 	let deletes: Vec<String> = splits.clone().iter().map(|split| {
 		let concatenated_string: String = split.0.to_owned();
