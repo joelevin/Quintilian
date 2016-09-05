@@ -5,11 +5,9 @@ use std::collections::HashSet;
 use std::collections::HashMap;
 use std::collections::hash_map::Entry::{Occupied, Vacant};
 use std::path::Path;
-use regex::Regex;
 use std::error::Error;
 use std::io::prelude::*;
 use std::iter::Iterator;
-use std::borrow::Borrow;
 use std::env;
 
 fn main() {
@@ -27,7 +25,6 @@ fn main() {
 		let mut buffer = String::new();
 		file.read_to_string(&mut buffer).unwrap();
 	    let nwords = words(&buffer);
-	    let alphabet = "abcdefghijklmnopqrstuvwxyz";
 	    let known_words = train(nwords);
 
 	    let correct_word = correct(&arg1, known_words);
@@ -122,10 +119,10 @@ fn edits1(word: &str) -> HashSet<String> {
 }
 
 fn known_edits_2(word: &str, nwords: HashMap<&str, i32>) -> Option<HashSet<String>> {
-	let mut known_edits: HashSet<String> = HashSet::new();
+	let known_edits: HashSet<String> = HashSet::new();
 	let mut union: HashSet<String> = HashSet::new();
 	let edits_1 = edits1(word);
-	for edit in edits_1 {
+	for _ in edits_1 {
 		if let Some(k) = known(edits1(word), nwords.clone()) {
 			union = known_edits.union(&k).cloned().collect();
 		}
@@ -157,18 +154,18 @@ fn known(words: HashSet<String>, nwords: HashMap<&str, i32>) -> Option<HashSet<S
 fn correct(word: &str, nwords: HashMap<&str, i32>) -> String {
 	let mut word_set: HashSet<String> = HashSet::new();
 	word_set.insert(word.to_string());
-	let emptySet: HashSet<String> = HashSet::new();
+	let empty_set: HashSet<String> = HashSet::new();
 
 	let first_known = known(word_set.clone(), nwords.clone());
 	let first_known_edits = known(edits1(word), nwords.clone());
-	let second_known_edits = known(known_edits_2(word, nwords.clone()).unwrap_or(emptySet.clone()), nwords.clone());
+	let second_known_edits = known(known_edits_2(word, nwords.clone()).unwrap_or(empty_set.clone()), nwords.clone());
 
-	let candidates = first_known.unwrap_or(first_known_edits.unwrap_or(second_known_edits.unwrap_or(emptySet)));
+	let candidates = first_known.unwrap_or(first_known_edits.unwrap_or(second_known_edits.unwrap_or(empty_set)));
 	let candidate = candidates.iter().max_by_key(|key| {
-		let keySlice: &str = &key;
+		let key_slice: &str = &key;
 		let default_count: i32 = 1;
-		let value = nwords.get(keySlice);
-		// println!("{:?} : {:?}", keySlice, value);
+		let value = nwords.get(key_slice);
+		// println!("{:?} : {:?}", key_slice, value);
 		match value {
 		    Some(value) => return value.to_owned(),
 		    None => return default_count.to_owned(),
