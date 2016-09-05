@@ -30,7 +30,6 @@ fn main() {
 	    let correct_word = correct(&arg1, known_words);
 	    println!("{:?}", correct_word);
     }
-    // deletes_test(split_test("hello"));
     // transposes_test(split_test("hello"));
     // replace_test(split_test("hello"));
     // inserts_test(split_test("hello"));
@@ -70,11 +69,8 @@ fn deletes(splits: &Vec<(&str, &str)>) -> Vec<String> {
 	}).collect();
 }
 
-fn edits1(word: &str) -> HashSet<String> {
-	let splits = splits(word);
-	let deletes: Vec<String> = deletes(&splits);
-
-	let transposes: Vec<String> = splits.clone().iter().map(|split| {
+fn transposes(splits: &Vec<(&str, &str)>) -> Vec<String> {
+	return splits.clone().iter().map(|split| {
 		let left_string: String = split.0.to_owned();
 		let right_string: String = split.1.to_owned();
 		if let Some(first) = right_string.chars().nth(0) {
@@ -90,6 +86,12 @@ fn edits1(word: &str) -> HashSet<String> {
 		}
 		return "".to_string()
 	}).filter(|string| !string.is_empty()).collect();
+}
+
+fn edits1(word: &str) -> HashSet<String> {
+	let splits = splits(word);
+	let deletes: Vec<String> = deletes(&splits);
+	let transposes: Vec<String> = transposes(&splits);
 
 	// replaces
 	let alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -206,29 +208,14 @@ fn deletes_test() {
 	assert_eq!(&deletes[..], &expected_deletes[..]);
 }
 
-// #[test]
-// fn transposes_test(splits: Vec<(&str, &str)>) {
-// 	let transposes: Vec<String> = splits.iter().map(|split| {
-// 		let left_string: String = split.0.to_owned();
-// 		let right_string: String = split.1.to_owned();
-// 		if let Some(first) = right_string.chars().nth(0) {
-// 			let first_string = first.to_string();
-// 			let mut first_drop = right_string.clone();
-// 			first_drop.remove(0);
-// 			if let Some(second) = first_drop.chars().nth(0) {
-// 				let second_string = second.to_string();
-// 				let mut second_drop = first_drop.clone();
-// 				second_drop.remove(0);
-// 				return left_string + &second_string + &first_string + &second_drop;
-// 			}
-// 		}
-
-// 		return "".to_string()
-	
-// 	}).filter(|string| !string.is_empty()).collect();
-
-// 	println!("{:?}", transposes);
-// }
+#[test]
+fn transposes_test() {
+	let word: &str = "hello";
+	let splits = splits(word);
+	let transposes = transposes(&splits);
+	let expected_transposes = vec!["ehllo", "hlelo", "hello", "helol"];
+	assert_eq!(&transposes[..], &expected_transposes[..]);
+}
 
 // #[test]
 // fn replace_test(splits: Vec<(&str, &str)>) {
